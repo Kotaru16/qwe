@@ -1,0 +1,46 @@
+@startuml Order Processing Sequence
+
+actor Customer
+participant "OrderSystem" as OS
+participant "Inventory" as Inv
+participant "Discount" as Disc
+participant "Order" as Ord
+database "Database" as DB
+
+Customer -> OS: Запрос на создание заказа
+activate OS
+
+OS -> DB: Получение данных клиента
+DB --> OS: Данные клиента
+
+OS -> OS: Создание нового заказа
+activate Ord
+
+loop Для каждого товара
+    Customer -> OS: Добавление товара в заказ
+    OS -> Inv: Проверка наличия
+    Inv --> OS: Результат проверки
+    
+    alt Товар в наличии
+        OS -> Disc: Проверка скидок
+        Disc --> OS: Информация о скидках
+        OS -> Ord: Добавление товара
+        Ord -> DB: Сохранение позиции заказа
+    else Товар отсутствует
+        OS --> Customer: Уведомление об отсутствии
+    end
+end
+
+Customer -> OS: Подтверждение заказа
+OS -> Ord: Расчет итоговой суммы
+Ord --> OS: Итоговая сумма
+OS -> DB: Сохранение заказа
+DB --> OS: Подтверждение сохранения
+OS -> Inv: Обновление остатков
+Inv --> OS: Подтверждение обновления
+OS --> Customer: Подтверждение заказа
+
+deactivate Ord
+deactivate OS
+
+@enduml 
