@@ -1,0 +1,19 @@
+# Игнорируем файлы базы данных
+*.db
+*.db-shm
+*.db-wal
+
+# Игнорируем файлы сборки
+bin/
+obj/
+
+# Игнорируем файлы IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Игнорируем логи
+*.log 
